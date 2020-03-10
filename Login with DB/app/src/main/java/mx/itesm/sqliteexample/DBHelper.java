@@ -14,15 +14,11 @@ import java.util.ArrayList;
 public class DBHelper extends SQLiteOpenHelper
 {
     //We are supposing this database has two tables. We define their attributes:
-    public static final String TABLE_USERS = "login";
+    public static final String TABLE_USERS = "users";
     public static final String USERS_ID ="id_user";
-    public static final String USERS_NAME ="name";
-    public static final String USERS_LASTNAME ="lastname";
-    public static final String USERS_DOB ="dob";
-    public static final String USERS_ROLE ="role";
-    public static final String USERS_SEMESTER ="semester";
     public static final String USERS_NICKNAME ="nickname";
     public static final String USERS_PASSWORD ="password";
+    public static final String USERS_DEPARTMENT ="department";
 
     public static final String TABLE_PRODUCTS = "products";
     public static final String PRODUCTS_ID ="id_product";
@@ -36,13 +32,9 @@ public class DBHelper extends SQLiteOpenHelper
 
     private static final String CREATE_TABLE_USERS = "CREATE TABLE "+TABLE_USERS+
             "("+USERS_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+
-            USERS_NAME+" TEXT NOT NULL, "+
-            USERS_LASTNAME+" TEXT NOT NULL, "+
-            USERS_DOB+" TEXT NOT NULL, "+
-            USERS_ROLE+" TEXT NOT NULL, "+
-            USERS_SEMESTER+" INTEGER NOT NULL, "+
             USERS_NICKNAME+" TEXT NOT NULL, "+
-            USERS_PASSWORD+" TEXT NOT NULL);";
+            USERS_PASSWORD+" TEXT NOT NULL, "+
+            USERS_DEPARTMENT+" TEXT NOT NULL);";
 
     private static final String CREATE_TABLE_PRODUCTS = "CREATE TABLE "+TABLE_PRODUCTS+
             "("+PRODUCTS_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+
@@ -84,27 +76,16 @@ public class DBHelper extends SQLiteOpenHelper
 
     public boolean insertUser(User user)
     {
-        String name, lastname, dob, role, nickname, password;
-        Integer semester;
-
-        name = user.name;
-        lastname = user.lastName;
-        dob = user.dob;
-        role = user.role;
-        semester = user.semester;
+        String nickname, password, department;
         nickname = user.nickname;
         password = user.password;
-
+        department = user.department;
 
         SQLiteDatabase database = this.getWritableDatabase(); // We obtain an instance of our database
         ContentValues contentValues = new ContentValues(); // We insert the data using one variable of type ContentValues
-        contentValues.put("name", name);
-        contentValues.put("lastname", lastname);
-        contentValues.put("dob", dob);
-        contentValues.put("role", role);
-        contentValues.put("semester",semester);
         contentValues.put("nickname", nickname);
         contentValues.put("password", password);
+        contentValues.put("department", department);
 
         database.insert("users",null,contentValues); //We insert
 
@@ -147,15 +128,10 @@ public class DBHelper extends SQLiteOpenHelper
             while (result.moveToNext()) {
                 User current_user = new User(
                         result.getInt(result.getColumnIndex(USERS_ID)),
-                        result.getString(result.getColumnIndex(USERS_NAME)),
-                        result.getString(result.getColumnIndex(USERS_LASTNAME)),
-                        result.getString(result.getColumnIndex(USERS_DOB)),
-                        result.getString(result.getColumnIndex(USERS_ROLE)),
-                        result.getInt(result.getColumnIndex(USERS_SEMESTER)),
                         result.getString(result.getColumnIndex(USERS_NICKNAME)),
-                        result.getString(result.getColumnIndex(USERS_PASSWORD))
+                        result.getString(result.getColumnIndex(USERS_PASSWORD)),
+                        result.getString(result.getColumnIndex(USERS_DEPARTMENT))
                 );
-                System.out.println(current_user.getName());
                 users_list.add(current_user);
             }
         }
@@ -195,13 +171,9 @@ public class DBHelper extends SQLiteOpenHelper
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor result = database.rawQuery("SELECT * FROM "+TABLE_USERS+" WHERE "+USERS_ID+" = "+id, null);
         User obtained_user = new User(result.getInt(result.getColumnIndex(USERS_ID)),
-                result.getString(result.getColumnIndex(USERS_NAME)),
-                result.getString(result.getColumnIndex(USERS_LASTNAME)),
-                result.getString(result.getColumnIndex(USERS_DOB)),
-                result.getString(result.getColumnIndex(USERS_ROLE)),
-                result.getInt(result.getColumnIndex(USERS_SEMESTER)),
                 result.getString(result.getColumnIndex(USERS_NICKNAME)),
-                result.getString(result.getColumnIndex(USERS_PASSWORD))
+                result.getString(result.getColumnIndex(USERS_PASSWORD)),
+                result.getString(result.getColumnIndex(USERS_DEPARTMENT))
         );
         return obtained_user; //We return the Cursor with all data
     }
@@ -219,17 +191,13 @@ public class DBHelper extends SQLiteOpenHelper
 
     //THIRD: We create functions to UPDATE the tables in our database:
 
-    public boolean updateUser(Integer id, String name, String lastname, String dob, String role, Integer semester, String nickname, String password)
+    public boolean updateUser(Integer id, String nickname, String password, String department)
     {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("name", name);
-        contentValues.put("lastname", lastname);
-        contentValues.put("dob", dob);
-        contentValues.put("role", role);
-        contentValues.put("semester",semester);
         contentValues.put("nickname", nickname);
         contentValues.put("password", password);
+        contentValues.put("department", department);
         database.update(TABLE_USERS, contentValues, "id = ?", new String[] {Integer.toString(id)});
         return true;
     }

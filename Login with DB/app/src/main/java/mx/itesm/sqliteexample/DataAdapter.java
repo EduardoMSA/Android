@@ -40,7 +40,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.UserViewHolder
         //binding the data with the viewholder views
         holder.textViewNickname.setText(user.getNickname());
         holder.textViewPassword.setText(user.getPassword());
-        holder.textViewDepartment.setText(String.valueOf(user.getRole()));
+        holder.textViewDepartment.setText(String.valueOf(user.getDepartment()));
 
         holder.imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.icon));
 

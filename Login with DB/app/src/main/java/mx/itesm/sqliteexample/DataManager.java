@@ -17,16 +17,15 @@ public class DataManager
 
     public boolean initialPopulate()
     {
-        Log.i("INFO","LENGTH" + myDBHelper.numRowsUsers());
         if(myDBHelper.numRowsUsers()==0)
         {
             Log.e(null,"No data in database, I will populate");
             //Maybe first time user uses the App. Here we populate the database with some initial
             // data
-            User user1 = new User("Eduardo","Méndez","02-09-1998","Master",8,"Edu","eduardo");
-            User user2 = new User("Luis","Garcia","10-05-1998","Operator",8,"Luigi","luis");
-            User user3 = new User("Mariana","Casanova","19-06-1997","Analyst",8,"Mar","mariana");
-            User user4 = new User("Andrés","Aguirre","21-03-1998","Chief",8,"Edu","eduardo");
+            User user1 = new User("user1","password","science");
+            User user2 = new User("user2", "abc123","science");
+            User user3 = new User("user3", "abcxyz","science");
+            User user4 = new User("user4", "iloveyou","medicine");
             myDBHelper.insertUser(user1);
             myDBHelper.insertUser(user2);
             myDBHelper.insertUser(user3);
@@ -49,9 +48,9 @@ public class DataManager
         return users_list;
     }
 
-    public void insertUser(String name, String lastname, String dob, String role, Integer semester, String nickname, String password)
+    public void insertUser(String nickname, String password, String department)
     {
-        User user_toInsert = new User(name, lastname, dob, role, semester, nickname, password);
+        User user_toInsert = new User(nickname, password, department);
         myDBHelper.insertUser(user_toInsert);
     }
     public void insertProduct(String name, double price)
